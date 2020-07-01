@@ -1,0 +1,13 @@
+<form method="POST">
+<h1>{{ title }}</h1>
+{% for message in get_flashed_messages() %}
+{{ message }}
+{% endfor %}
+{{ form.username.label }} 
+{{ form.username() }} 
+{{ form.password.label }} 
+{{ form.password() }} 
+{{ form.submit() }} 
+
+
+</form>

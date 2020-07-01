@@ -1,0 +1,27 @@
+{% extends 'base.html' %}
+
+{% block content %}
+    {% set links=[
+        {'label':'Home', 'href':url_for('.index')},
+        {'label':'Upload', 'href':url_for('.upload')},
+        {'label':'Login', 'href':url_for('auth.login')},
+        {'label':'Services', 'href':url_for('.services')},
+        {'label':'Register', 'href':url_for('auth.register')},
+        ] %}
+    <nav>
+        {% if current_user.is_quthenticated() %}
+            <li><a href="">{{ current_user.name }}</a></li>
+        {% else %}
+        <li><a href="{{ url_for('login') }}">登录</a></li>
+        <li><a href="{{ url_for('register') }}"> 注册</a></li>
+        {% for link in links %}
+            {% if not loop.first %} | {% endif %}
+            <a href="{{ link.href }}">{{ link.label }}</a>
+        {% endfor %}
+        <h1>{{ self.title }}</h1>
+    </nav>
+{% endblock %}
+
+{% block footer %}
+    {{ super() }}
+{% endblock %}

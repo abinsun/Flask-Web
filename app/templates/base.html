@@ -1,0 +1,21 @@
+{% extends 'bootstrap/base.html' %}
+<!DOCTYPE html>
+<html lang="en">
+    <meta charset="UTF-8">    
+<head>
+    {% block head %}
+        
+        {{ super() }}
+        <title>{{ title }}</title>
+    {% endblock %}
+
+</head>
+<body>
+<header>{% block header %}{% endblock %}</header> 
+<div>{% block content %}{% endblock %}</div>
+<footer>
+    {% block footer %}
+    {% endblock %}
+</footer>
+</body>
+</html>

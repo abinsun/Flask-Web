@@ -1,0 +1,2 @@
+pip freeze> requirements.txt     #产生一个项目所需要的依赖环境
+pip install -r requirements.txt  #安装所有环境
