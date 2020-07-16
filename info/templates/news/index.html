@@ -1,0 +1,25 @@
+{% extends 'news/base.html' %}
+
+{% block titleBlock %}首页-新经资讯{% endblock %}
+
+{% block scriptBlock %}
+<script type="text/javascript" src="../../static/news/js/index.js"></script>
+{% endblock %}
+
+{% block categoryBlock %}
+<ul class="menu fl">
+                {% for category in data.category_li %}
+                    {% if loop.index == 1 %}
+                        <li class="active" data-cid="{{ category.id }}"><a href="javascript:;">{{ category.name }}</a></li>
+                    {% else %}
+                     <li data-cid="{{ category.id }}"><a href="javascript:;">{{ category.name }}</a></li>
+                    {% endif %}
+                {% endfor %}
+            </ul>
+{% endblock %}
+
+{% block contentBlock %}
+<ul class="list_con fl">
+
+</ul>
+{% endblock %}
