@@ -12,7 +12,7 @@ from redis import StrictRedis
 from config import config
 
 
-db = SQLAlchemy()
+db = SQLAlchemy(use_native_unicode='utf8')
 redis_store = None
 # redis_store: StrictRedis = None
 

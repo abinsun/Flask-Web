@@ -11,6 +11,7 @@ from ...libs.yuntongxun.sms import CCP
 from ...models import User
 from ...utils.response_code import RET
 
+#登陆/注册/手机验证/图片验证码
 
 @passport_blu.route('/logout')
 def logout():
@@ -119,12 +120,15 @@ def register():
         # 获取本地验证码失败
         return jsonify(errno=RET.DBERR, errmsg="获取本地验证码失败")
     if not real_sms_code:
+        pass
         # 短信验证码过期
-        return jsonify(errno=RET.NODATA, errmsg="短信验证码过期")
+        #return jsonify(errno=RET.NODATA, errmsg="短信验证码过期")（原始）
 
     # 4.校验用户输入的短信验证码与真实短信验证码是否一致
-    if sms_code != real_sms_code:
-        return jsonify(errno=RET.DATAERR, errmsg="验证码输入错误")
+    # if sms_code != real_sms_code:
+    #     return jsonify(errno=RET.DATAERR, errmsg="验证码输入错误")（原始）
+    if sms_code == 3369:
+        return jsonify(errno=RET.DATAERR, errmsg="验证码输入正确")
 
     # 5.如果一致，初始化User模型，并且赋值属性
     user = User()
@@ -183,7 +187,8 @@ def send_msg_code():
         return jsonify(errno=RET.DATAERR, errmsg="手机号不正确")
     # 3.从redis中取出真实的验证码内容
     try:
-        real_image_code = redis_store.get("ImageCodeId_" + image_code_id)
+        #real_image_code = redis_store.get("ImageCodeId_" + image_code_id)     #（原始）
+        real_image_code=3369
     except Exception as e:
         current_app.logger.error(e)
         return jsonify(RET.DBERR, errmsg="数据查询失败")
@@ -199,12 +204,13 @@ def send_msg_code():
     except Exception as e:
         current_app.logger.error(e)
         return jsonify(errno=RET.DBERR, errmsg="数据库查询错误")
-    # if user:
-    #     # 该手机已被注册
-    #     return jsonify(errno=RET.DATAEXIST, errmsg="该手机已被注册")
+    # if user:              #（原始）
+    #     # 该手机已被注册   #（原始）
+    #     return jsonify(errno=RET.DATAEXIST, errmsg="该手机已被注册")#（原始）
     # 5.如果一致，生成验证码内容(随机数据)
     result = random.randint(0, 999999)
-    sms_code = "%06d" % result
+    #sms_code = "%06d" % result    #（原始）
+    sms_code=3369
     print("短信验证码的内容：%s" % sms_code)
     current_app.logger.debug("短信验证码的内容：%s" % sms_code)
     result = CCP().send_template_sms(mobile, [sms_code, constants.SMS_CODE_REDIS_EXPIRES / 60], "1")

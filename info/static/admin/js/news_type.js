@@ -11,6 +11,9 @@ $(function(){
     var $confirm = $('.confirm');
     var $error = $('.error_tip');
     var $input = $('.input_txt3');
+    var $title=$('.input_txt4');
+    var $dec=$('.input_txt5');
+
     var sHandler = 'edit';
     var sId = 0;
 
@@ -40,10 +43,13 @@ $(function(){
 
     $confirm.click(function(){
 
-        var params = {}
+        var tVal = $title.val();
+        var dVal = $dec.val();
         if(sHandler=='edit')
         {
             var sVal = $input.val();
+
+
             if(sVal=='')
             {
                 $error.html('输入框不能为空').show();
@@ -52,6 +58,8 @@ $(function(){
             params = {
                 "id": sId,
                 "name": sVal,
+                "title": tVal,
+                "dec": dVal,
             };
         }
         else
@@ -64,6 +72,9 @@ $(function(){
             }
             params = {
                 "name": sVal,
+                "title": tVal,
+                "dec": dVal,
+
             }
         }
 

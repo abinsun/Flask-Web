@@ -6,6 +6,8 @@ from ...models import User, News, Category
 from ...utils.common import user_login_data
 from ...utils.response_code import RET
 
+# 获取首页新闻数据
+# 显示用户是否登录的逻辑
 
 @index_blu.route('/news_list')
 def news_list():

@@ -6,6 +6,12 @@ from info.modules.news import news_blu
 from info.utils.common import user_login_data
 from info.utils.response_code import RET
 
+# 新闻详情
+# 新闻收藏
+# 评论新闻
+# 评论点赞
+# 关注与取消用户
+
 
 @news_blu.route("/<int:news_id>")
 @user_login_data
@@ -16,7 +22,9 @@ def news_detail(news_id):
     :return:
     """
     # 显示用户是否登录的逻辑
+    print('test')
     user = g.user
+    print(user)
     # 右侧新闻排行的逻辑
     news_list = []
     try:

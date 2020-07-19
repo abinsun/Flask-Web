@@ -10,6 +10,13 @@ from info.utils.common import user_login_data
 from info.utils.image_storage import storage
 from info.utils.response_code import RET
 
+# 管理后台主页
+# 查询用户人数
+# 获取用户列表
+# 待审核新闻列表
+# 新闻审核
+# 新闻编辑详情
+# 新闻分类管理
 
 @admin_blu.route("/login", methods=["GET", "POST"])
 def login():
@@ -407,7 +414,7 @@ def news_type():
             # 拼接内容
             categories_dicts.append(cate_dict)
 
-        categories_dicts.pop(0)
+        #categories_dicts.pop(0)   #yuanshis
         data = {
             "categories": categories_dicts
         }
@@ -417,10 +424,15 @@ def news_type():
     # POST  修改或者添加分类
     # 1.取参数
     category_name = request.json.get("name")
+    cdd=request.json
+    print(cdd)
+    category_title =  request.json.get("title")
+    category_dec =  request.json.get("dec")
+    print(category_name,category_title,category_dec)
     # 如果传入了category_id，代表是编辑已存在的分类
     category_id = request.json.get("id")
-    if not category_name:
-        return jsonify(errno=RET.PARAMERR, errmsg="参数错误")
+    if not category_name:           #（原始）
+        return jsonify(errno=RET.PARAMERR, errmsg="参数错误")    #（原始）
     # 判断是否有分类id
     if category_id:
         try:
@@ -437,9 +449,12 @@ def news_type():
         # 如果没有分类id，则是添加分类
         category = Category()
         category.name = category_name
+        category.title = category_title
+        category.dec = category_dec
         db.session.add(category)
 
     try:
+        print('test')
         db.session.commit()
     except Exception as e:
         current_app.logger.error(e)

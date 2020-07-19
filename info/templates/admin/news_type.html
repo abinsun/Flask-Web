@@ -22,7 +22,9 @@
 				{% for category in data.categories %}
                     <tr>
                         <td>{{ category.id }}</td>
-                        <td>{{ category.name }}</td>
+						<td>{{ category.name }}</td>
+						<td>{{ category.title }}</td>
+						<td>{{ category.dec }}</td>
                         <td><a href="javascript:;" class="edit">编辑</a></td>
                     </tr>
                 {% endfor %}
@@ -38,6 +40,8 @@
 					<h3>修改分类</h3>
 					<div class="form_group mt50">
 						<label class="input_label">分类名称：</label><input type="text" class="input_txt3">
+						<label class="input_label">栏目标题：</label><input type="text" class="input_txt4">
+						<label class="input_label">栏目描述：</label><input type="text" class="input_txt5">
 						<span class="error_tip">提示文字</span>
 					</div>			
 					<div class="form_group line_top">

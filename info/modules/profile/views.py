@@ -7,6 +7,13 @@ from info.utils.common import user_login_data
 from info.utils.image_storage import storage
 from info.utils.response_code import RET
 
+# 用户登陆
+# 用户基本信息
+# 密码修改
+# 收藏新闻
+# 关注粉丝
+# 新闻编辑
+#返回指定用户的发布新闻
 
 @profile_blu.route('/info')
 @user_login_data
@@ -167,7 +174,7 @@ def news_release():
             categories_dicts.append(cate_dict)
 
         # 移除`最新`分类
-        categories_dicts.pop(0)
+        #categories_dicts.pop(0)   #yuanshi
         # 返回内容
         return render_template('news/user_news_release.html', data={"categories": categories_dicts})
 
@@ -186,30 +193,38 @@ def news_release():
     index_image = request.files.get("index_image")
     # 分类id
     category_id = request.form.get("category_id")
+    key=''
+    index_image_data=''
     # 1.1 判断数据是否有值
-    if not all([title, source, digest, content, index_image, category_id]):
-        return jsonify(errno=RET.PARAMERR, errmsg="参数有误")
+    # if not all([title, source, digest, content, index_image, category_id]):
+    #     return jsonify(errno=RET.PARAMERR, errmsg="参数有误")
 
     # 1.2 判断参数
     try:
         category_id = int(category_id)
     except Exception as e:
         current_app.logger.error(e)
-        return jsonify(errno=RET.PARAMERR, errmsg="参数有误")
+        print('categpry_id not same')
+        print(e)
+        #return jsonify(errno=RET.PARAMERR, errmsg="参数有误")
 
     # 1.2 尝试读取图片
     try:
         index_image_data = index_image.read()
     except Exception as e:
         current_app.logger.error(e)
-        return jsonify(errno=RET.PARAMERR, errmsg="参数有误")
+        print('picture save fail')
+        print(e)
+        pass
+        #return jsonify(errno=RET.PARAMERR, errmsg="参数有误")
 
     # 2. 将标题图片上传到七牛云
     try:
         key = storage(index_image_data)
     except Exception as e:
         current_app.logger.error(e)
-        return jsonify(errno=RET.THIRDERR, errmsg="上传图片错误")
+        pass
+        #return jsonify(errno=RET.THIRDERR, errmsg="上传图片错误")
 
     # 3. 初始化新闻模型，并设置相关数据
     news = News()
@@ -217,22 +232,30 @@ def news_release():
     news.digest = digest
     news.source = source
     news.content = content
-    news.index_image_url = constants.QINIU_DOMIN_PREFIX + key
+    if key:
+        try:
+            news.index_image_url = constants.QINIU_DOMIN_PREFIX + key
+        except:
+            news.index_image_url=''        
     news.category_id = category_id
     news.user_id = g.user.id
     # 1代表待审核状态
     news.status = 1
-
+    print('ok')
+    print(news.title,news.digest,news.source,news.content)
     # 4. 保存到数据库
     try:
+        print('succes')
         db.session.add(news)
         db.session.commit()
+        return jsonify(errno=RET.OK, errmsg="发布成功，等待审核")
     except Exception as e:
+        print('shibai')
         current_app.logger.error(e)
         db.session.rollback()
         return jsonify(errno=RET.DBERR, errmsg="保存数据失败")
     # 5. 返回结果
-    return jsonify(errno=RET.OK, errmsg="发布成功，等待审核")
+    #return jsonify(errno=RET.OK, errmsg="发布成功，等待审核")
 
 
 @profile_blu.route('/news_list')
